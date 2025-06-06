@@ -52,6 +52,7 @@ void Socket::setTcpNoDelay(bool on) {
     }
 }
 
+// 允许立即重用处于 TIME_WAIT（2*MSL时间）状态的地址, 用于服务器崩溃后快速重启（避免"Address already in use"错误）
 void Socket::setReuseAddr(bool on) {
     int optval = on ? 1 : 0;
     if (::setsockopt(sockfd_, SOL_SOCKET, SO_REUSEADDR,
@@ -60,6 +61,7 @@ void Socket::setReuseAddr(bool on) {
     }
 }
 
+// 允许多个套接字绑定完全相同的IP和端口组合,核会通过哈希算法将传入的连接请求均匀分配到这些套接字上，避免传统的单监听套接字+accept() 竞争问题
 void Socket::setReusePort(bool on) {
 #ifdef SO_REUSEPORT
     int optval = on ? 1 : 0;
@@ -74,6 +76,7 @@ void Socket::setReusePort(bool on) {
 #endif
 }
 
+// 启用TCP保活机制
 void Socket::setKeepAlive(bool on) {
     int optval = on ? 1 : 0;
     if (::setsockopt(sockfd_, SOL_SOCKET, SO_KEEPALIVE,
