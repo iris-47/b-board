@@ -3,6 +3,7 @@
 #include <memory>
 #include <string>
 #include <functional>
+#include <boost/any.hpp>
 #include "core/net/buffer.h"
 #include "core/net/inet_address.h"
 
@@ -43,7 +44,12 @@ public:
     void send(const std::string& message);
     void send(const void* message, size_t len);
     void send(Buffer* message);
-    
+
+    // contex_相关
+    void setContext(const boost::any& context) { context_ = context; }
+    const boost::any& getContext() const { return context_; }
+    boost::any* getMutableContext(){ return &context_; }
+
     // 关闭连接
     void shutdown();
     
@@ -82,20 +88,23 @@ private:
     const std::string name_;   // 连接名
     StateE state_;      // 连接状态
     
+    // 笔记：用unique_ptr管理对象子对象，其生命周期随本类终结
     std::unique_ptr<Socket> socket_;   // Socket对象
     std::unique_ptr<Channel> channel_; // Channel对象
     const InetAddress local_addr_;     // 本地地址
     const InetAddress peer_addr_;      // 对端地址
     
-    ConnectionCallback connection_callback_;       // 连接状态改变回调
-    MessageCallback message_callback_;             // 消息到达回调
-    WriteCompleteCallback write_complete_callback_; // 写完成回调
-    CloseCallback close_callback_;                 // 关闭回调
+    ConnectionCallback connection_callback_;         // 连接状态改变回调
+    MessageCallback message_callback_;               // 消息处理回调
+    WriteCompleteCallback write_complete_callback_;  // 写完成回调
+    CloseCallback close_callback_;                   // 对端关闭回调
     HighWaterMarkCallback high_water_mark_callback_; // 高水位回调
-    size_t high_water_mark_;                        // 高水位标记
+    size_t high_water_mark_;                         // 高水位标记
     
     Buffer input_buffer_;   // 输入缓冲区
     Buffer output_buffer_;  // 输出缓冲区
+
+    boost::any context_; // 用于http
 };
 
 } // namespace core
