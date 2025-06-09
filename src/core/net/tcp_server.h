@@ -33,7 +33,7 @@ public:
     
     void setThreadNum(int numThreads);
     void setThreadInitCallback(const ThreadInitCallback& cb) { thread_init_callback_ = cb; }
-    void setConnectionCallback(const TcpConnection::ConnectionCallback& cb) { connection_callback_ = cb; }
+    void setConnectionChangeCallback(const TcpConnection::ConnectionCallback& cb) { connection_change_callback_ = cb; }
     void setMessageCallback(const TcpConnection::MessageCallback& cb) { message_callback_ = cb; }
     void setWriteCompleteCallback(const TcpConnection::WriteCompleteCallback& cb) { write_complete_callback_ = cb; }
     
@@ -60,7 +60,7 @@ private:
     std::unique_ptr<Acceptor> acceptor_;               // 接受器，用于接受新的tcp连接
     std::unique_ptr<EventLoopThreadPool> thread_pool_; // 线程池，管理EventLoop线程。
     
-    TcpConnection::ConnectionCallback connection_callback_;        // 连接回调, 用于设置TcpConnection类
+    TcpConnection::ConnectionCallback connection_change_callback_;        // 连接回调, 用于设置TcpConnection类
     TcpConnection::MessageCallback message_callback_;              // 消息回调, 用于设置TcpConnection类
     TcpConnection::WriteCompleteCallback write_complete_callback_; // 写完成回调, 用于设置TcpConnection类
     ThreadInitCallback thread_init_callback_;                      // 线程初始化回调，用于设置EventLoopThreadPool类

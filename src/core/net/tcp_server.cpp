@@ -18,7 +18,7 @@ TcpServer::TcpServer(EventLoop* loop, const InetAddress& listenAddr,
       name_(name),
       acceptor_(new Acceptor(loop, listenAddr, option == kReusePort)),
       thread_pool_(new EventLoopThreadPool(loop, name)),
-      connection_callback_(),
+      connection_change_callback_(),
       message_callback_(),
       write_complete_callback_(),
       thread_init_callback_(),
@@ -95,7 +95,7 @@ void TcpServer::newConnection(int sockfd, const InetAddress& peerAddr) {
     connections_[connName] = conn;
     
     // 设置回调函数
-    conn->setConnectionCallback(connection_callback_);
+    conn->setConnectionChangeCallback(connection_change_callback_);
     conn->setMessageCallback(message_callback_);
     conn->setWriteCompleteCallback(write_complete_callback_);
     

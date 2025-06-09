@@ -171,9 +171,8 @@ void TcpConnection::connectEstablished() {
     channel_->tie(shared_from_this());
     channel_->enableReading();
     
-    // 回调连接建立回调
-    if (connection_callback_) {
-        connection_callback_(shared_from_this());
+    if (connection_change_callback_) {
+        connection_change_callback_(shared_from_this());
     }
 }
 
@@ -183,9 +182,8 @@ void TcpConnection::connectDestroyed() {
         setState(kDisconnected);
         channel_->disableAll();
         
-        // 回调连接关闭回调
-        if (connection_callback_) {
-            connection_callback_(shared_from_this());
+        if (connection_change_callback_) {
+            connection_change_callback_(shared_from_this());
         }
     }
     

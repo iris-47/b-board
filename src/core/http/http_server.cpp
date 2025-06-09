@@ -27,7 +27,7 @@ HttpServer::HttpServer(EventLoop* loop, const InetAddress& listenAddr,
       }) {
     
     // 设置回调函数
-    server_.setConnectionCallback(
+    server_.setConnectionChangeCallback(
         std::bind(&HttpServer::onConnection, this, std::placeholders::_1));
     server_.setMessageCallback(
         std::bind(&HttpServer::onMessage, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));

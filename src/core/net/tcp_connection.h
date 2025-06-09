@@ -57,7 +57,7 @@ public:
     void setTcpNoDelay(bool on);
     
     // 设置回调函数
-    void setConnectionCallback(const ConnectionCallback& cb) { connection_callback_ = cb; }
+    void setConnectionChangeCallback(const ConnectionCallback& cb) { connection_change_callback_ = cb; }
     void setMessageCallback(const MessageCallback& cb) { message_callback_ = cb; }
     void setWriteCompleteCallback(const WriteCompleteCallback& cb) { write_complete_callback_ = cb; }
     void setCloseCallback(const CloseCallback& cb) { close_callback_ = cb; }
@@ -94,7 +94,7 @@ private:
     const InetAddress local_addr_;     // 本地地址
     const InetAddress peer_addr_;      // 对端地址
     
-    ConnectionCallback connection_callback_;         // 连接状态改变回调
+    ConnectionCallback connection_change_callback_;         // 连接状态改变回调
     MessageCallback message_callback_;               // 消息处理回调
     WriteCompleteCallback write_complete_callback_;  // 写完成回调
     CloseCallback close_callback_;                   // 对端关闭回调
